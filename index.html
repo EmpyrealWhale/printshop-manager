@@ -8,580 +8,1127 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { font-family: system-ui, -apple-system, sans-serif; }
+    </style>
 </head>
 <body>
     <div id="root"></div>
     
     <script type="text/babel">
-    import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Settings, Moon, Sun, Save, X, Package, Briefcase, Wrench, ShoppingCart, TrendingUp, DollarSign, Calculator, Boxes, ChevronDown, ChevronUp } from 'lucide-react';
+        const { useState, useEffect } = React;
+        
+        // Lucide icons
+        const Plus = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>;
+        const Edit2 = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>;
+        const Trash2 = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>;
+        const Settings = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>;
+        const Moon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
+        const Sun = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>;
+        const Save = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>;
+        const X = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
+        const Package = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>;
+        const Briefcase = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
+        const Wrench = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
+        const TrendingUp = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
+        const Boxes = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/></svg>;
+        const ChevronDown = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
+        const ChevronUp = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>;
 
-export default function BusinessManager() {
-  const [products, setProducts] = useState([]);
-  const [services, setServices] = useState([]);
-  const [materials, setMaterials] = useState([]);
-  const [equipment, setEquipment] = useState([]);
-  const [activeTab, setActiveTab] = useState('products');
-  const [showModal, setShowModal] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [editingItem, setEditingItem] = useState(null);
-  const [theme, setTheme] = useState('dark');
-  const [primaryColor, setPrimaryColor] = useState('#3b82f6');
-  const [loading, setLoading] = useState(true);
-  const [expandedProduct, setExpandedProduct] = useState(null);
-  
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: '',
-    category: '',
-    materials: [],
-    profitMargin: 20
-  });
+        function App() {
+          const [products, setProducts] = useState([]);
+          const [services, setServices] = useState([]);
+          const [materials, setMaterials] = useState([]);
+          const [equipment, setEquipment] = useState([]);
+          const [activeTab, setActiveTab] = useState('products');
+          const [showModal, setShowModal] = useState(false);
+          const [showSettings, setShowSettings] = useState(false);
+          const [editingItem, setEditingItem] = useState(null);
+          const [theme, setTheme] = useState('dark');
+          const [primaryColor, setPrimaryColor] = useState('#3b82f6');
+          const [loading, setLoading] = useState(true);
+          const [expandedProduct, setExpandedProduct] = useState(null);
+          
+          const [formData, setFormData] = useState({
+            title: '',
+            description: '',
+            price: '',
+            category: '',
+            materials: [],
+            profitMargin: 20
+          });
 
-  const [materialForm, setMaterialForm] = useState({
-    title: '',
-    unit: 'عدد',
-    pricePerUnit: '',
-    category: ''
-  });
+          const [materialForm, setMaterialForm] = useState({
+            title: '',
+            unit: 'عدد',
+            pricePerUnit: '',
+            category: ''
+          });
 
-  const [equipmentForm, setEquipmentForm] = useState({
-    title: '',
-    brand: '',
-    model: '',
-    purchaseDate: '',
-    purchasePrice: '',
-    maintenanceSchedule: '',
-    notes: ''
-  });
+          const [equipmentForm, setEquipmentForm] = useState({
+            title: '',
+            brand: '',
+            model: '',
+            purchaseDate: '',
+            purchasePrice: '',
+            maintenanceSchedule: '',
+            notes: ''
+          });
 
-  useEffect(() => {
-    loadData();
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    const savedColor = localStorage.getItem('primaryColor') || '#3b82f6';
-    setTheme(savedTheme);
-    setPrimaryColor(savedColor);
-  }, []);
+          useEffect(() => {
+            loadData();
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedColor = localStorage.getItem('primaryColor') || '#3b82f6';
+            setTheme(savedTheme);
+            setPrimaryColor(savedColor);
+          }, []);
 
-  useEffect(() => {
-    document.documentElement.style.setProperty('--primary-color', primaryColor);
-  }, [primaryColor]);
+          useEffect(() => {
+            document.documentElement.style.setProperty('--primary-color', primaryColor);
+          }, [primaryColor]);
 
-  const loadData = async () => {
-    try {
-      const savedProducts = localStorage.getItem('products');
-      const savedServices = localStorage.getItem('services');
-      const savedMaterials = localStorage.getItem('materials');
-      const savedEquipment = localStorage.getItem('equipment');
-      
-      if (savedProducts) setProducts(JSON.parse(savedProducts));
-      if (savedServices) setServices(JSON.parse(savedServices));
-      if (savedMaterials) setMaterials(JSON.parse(savedMaterials));
-      if (savedEquipment) setEquipment(JSON.parse(savedEquipment));
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
-    setLoading(false);
-  };
+          const loadData = () => {
+            try {
+              const savedProducts = localStorage.getItem('products');
+              const savedServices = localStorage.getItem('services');
+              const savedMaterials = localStorage.getItem('materials');
+              const savedEquipment = localStorage.getItem('equipment');
+              
+              if (savedProducts) setProducts(JSON.parse(savedProducts));
+              if (savedServices) setServices(JSON.parse(savedServices));
+              if (savedMaterials) setMaterials(JSON.parse(savedMaterials));
+              if (savedEquipment) setEquipment(JSON.parse(savedEquipment));
+            } catch (error) {
+              console.error('Error loading data:', error);
+            }
+            setLoading(false);
+          };
 
-  const saveProducts = (data) => {
-    localStorage.setItem('products', JSON.stringify(data));
-    setProducts(data);
-  };
+          const saveProducts = (data) => {
+            localStorage.setItem('products', JSON.stringify(data));
+            setProducts(data);
+          };
 
-  const saveServices = (data) => {
-    localStorage.setItem('services', JSON.stringify(data));
-    setServices(data);
-  };
+          const saveServices = (data) => {
+            localStorage.setItem('services', JSON.stringify(data));
+            setServices(data);
+          };
 
-  const saveMaterials = (data) => {
-    localStorage.setItem('materials', JSON.stringify(data));
-    setMaterials(data);
-  };
+          const saveMaterials = (data) => {
+            localStorage.setItem('materials', JSON.stringify(data));
+            setMaterials(data);
+          };
 
-  const saveEquipment = (data) => {
-    localStorage.setItem('equipment', JSON.stringify(data));
-    setEquipment(data);
-  };
+          const saveEquipment = (data) => {
+            localStorage.setItem('equipment', JSON.stringify(data));
+            setEquipment(data);
+          };
 
-  const calculateProductCost = (productMaterials) => {
-    return productMaterials.reduce((total, pm) => {
-      const material = materials.find(m => m.id === pm.materialId);
-      if (material) {
-        return total + (parseFloat(material.pricePerUnit) * parseFloat(pm.quantity));
-      }
-      return total;
-    }, 0);
-  };
+          const calculateProductCost = (productMaterials) => {
+            return productMaterials.reduce((total, pm) => {
+              const material = materials.find(m => m.id === pm.materialId);
+              if (material) {
+                return total + (parseFloat(material.pricePerUnit) * parseFloat(pm.quantity));
+              }
+              return total;
+            }, 0);
+          };
 
-  const calculateProfit = (cost, price) => {
-    const profit = parseFloat(price) - cost;
-    const profitPercent = cost > 0 ? (profit / cost) * 100 : 0;
-    return { profit, profitPercent };
-  };
+          const handleAddProduct = () => {
+            if (!formData.title.trim()) return;
+            
+            const cost = calculateProductCost(formData.materials);
+            const suggestedPrice = cost * (1 + formData.profitMargin / 100);
+            
+            const newProduct = {
+              id: Date.now(),
+              title: formData.title,
+              description: formData.description,
+              category: formData.category,
+              materials: formData.materials,
+              cost: cost,
+              price: formData.price || suggestedPrice.toFixed(0),
+              profitMargin: formData.profitMargin,
+              createdAt: new Date().toISOString()
+            };
+            
+            saveProducts([...products, newProduct]);
+            resetForm();
+            setShowModal(false);
+          };
 
-  const handleAddProduct = () => {
-    if (!formData.title.trim()) return;
-    
-    const cost = calculateProductCost(formData.materials);
-    const suggestedPrice = cost * (1 + formData.profitMargin / 100);
-    
-    const newProduct = {
-      id: Date.now(),
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      materials: formData.materials,
-      cost: cost,
-      price: formData.price || suggestedPrice.toFixed(0),
-      profitMargin: formData.profitMargin,
-      createdAt: new Date().toISOString()
-    };
-    
-    saveProducts([...products, newProduct]);
-    resetForm();
-    setShowModal(false);
-  };
+          const handleUpdateProduct = () => {
+            if (!formData.title.trim()) return;
+            
+            const cost = calculateProductCost(formData.materials);
+            
+            const updatedProducts = products.map(item => 
+              item.id === editingItem.id 
+                ? { 
+                    ...item, 
+                    title: formData.title,
+                    description: formData.description,
+                    category: formData.category,
+                    materials: formData.materials,
+                    cost: cost,
+                    price: formData.price,
+                    profitMargin: formData.profitMargin,
+                    updatedAt: new Date().toISOString()
+                  }
+                : item
+            );
+            
+            saveProducts(updatedProducts);
+            resetForm();
+            setShowModal(false);
+            setEditingItem(null);
+          };
 
-  const handleUpdateProduct = () => {
-    if (!formData.title.trim()) return;
-    
-    const cost = calculateProductCost(formData.materials);
-    
-    const updatedProducts = products.map(item => 
-      item.id === editingItem.id 
-        ? { 
-            ...item, 
-            title: formData.title,
-            description: formData.description,
-            category: formData.category,
-            materials: formData.materials,
-            cost: cost,
-            price: formData.price,
-            profitMargin: formData.profitMargin,
-            updatedAt: new Date().toISOString()
-          }
-        : item
-    );
-    
-    saveProducts(updatedProducts);
-    resetForm();
-    setShowModal(false);
-    setEditingItem(null);
-  };
+          const handleAddService = () => {
+            if (!formData.title.trim()) return;
+            
+            const newService = {
+              id: Date.now(),
+              title: formData.title,
+              description: formData.description,
+              price: formData.price,
+              category: formData.category,
+              createdAt: new Date().toISOString()
+            };
+            
+            saveServices([...services, newService]);
+            resetForm();
+            setShowModal(false);
+          };
 
-  const handleAddService = () => {
-    if (!formData.title.trim()) return;
-    
-    const newService = {
-      id: Date.now(),
-      title: formData.title,
-      description: formData.description,
-      price: formData.price,
-      category: formData.category,
-      createdAt: new Date().toISOString()
-    };
-    
-    saveServices([...services, newService]);
-    resetForm();
-    setShowModal(false);
-  };
+          const handleUpdateService = () => {
+            if (!formData.title.trim()) return;
+            
+            const updatedServices = services.map(item => 
+              item.id === editingItem.id 
+                ? { 
+                    ...item, 
+                    title: formData.title,
+                    description: formData.description,
+                    price: formData.price,
+                    category: formData.category,
+                    updatedAt: new Date().toISOString()
+                  }
+                : item
+            );
+            
+            saveServices(updatedServices);
+            resetForm();
+            setShowModal(false);
+            setEditingItem(null);
+          };
 
-  const handleUpdateService = () => {
-    if (!formData.title.trim()) return;
-    
-    const updatedServices = services.map(item => 
-      item.id === editingItem.id 
-        ? { 
-            ...item, 
-            title: formData.title,
-            description: formData.description,
-            price: formData.price,
-            category: formData.category,
-            updatedAt: new Date().toISOString()
-          }
-        : item
-    );
-    
-    saveServices(updatedServices);
-    resetForm();
-    setShowModal(false);
-    setEditingItem(null);
-  };
+          const handleAddMaterial = () => {
+            if (!materialForm.title.trim()) return;
+            
+            const newMaterial = {
+              id: Date.now(),
+              title: materialForm.title,
+              unit: materialForm.unit,
+              pricePerUnit: materialForm.pricePerUnit,
+              category: materialForm.category,
+              createdAt: new Date().toISOString()
+            };
+            
+            saveMaterials([...materials, newMaterial]);
+            setMaterialForm({ title: '', unit: 'عدد', pricePerUnit: '', category: '' });
+            setShowModal(false);
+          };
 
-  const handleAddMaterial = () => {
-    if (!materialForm.title.trim()) return;
-    
-    const newMaterial = {
-      id: Date.now(),
-      title: materialForm.title,
-      unit: materialForm.unit,
-      pricePerUnit: materialForm.pricePerUnit,
-      category: materialForm.category,
-      createdAt: new Date().toISOString()
-    };
-    
-    saveMaterials([...materials, newMaterial]);
-    setMaterialForm({ title: '', unit: 'عدد', pricePerUnit: '', category: '' });
-    setShowModal(false);
-  };
+          const handleUpdateMaterial = () => {
+            if (!materialForm.title.trim()) return;
+            
+            const updatedMaterials = materials.map(item => 
+              item.id === editingItem.id 
+                ? { 
+                    ...item, 
+                    ...materialForm,
+                    updatedAt: new Date().toISOString()
+                  }
+                : item
+            );
+            
+            saveMaterials(updatedMaterials);
+            setMaterialForm({ title: '', unit: 'عدد', pricePerUnit: '', category: '' });
+            setShowModal(false);
+            setEditingItem(null);
+          };
 
-  const handleUpdateMaterial = () => {
-    if (!materialForm.title.trim()) return;
-    
-    const updatedMaterials = materials.map(item => 
-      item.id === editingItem.id 
-        ? { 
-            ...item, 
-            ...materialForm,
-            updatedAt: new Date().toISOString()
-          }
-        : item
-    );
-    
-    saveMaterials(updatedMaterials);
-    setMaterialForm({ title: '', unit: 'عدد', pricePerUnit: '', category: '' });
-    setShowModal(false);
-    setEditingItem(null);
-  };
+          const handleAddEquipment = () => {
+            if (!equipmentForm.title.trim()) return;
+            
+            const newEquipment = {
+              id: Date.now(),
+              ...equipmentForm,
+              createdAt: new Date().toISOString()
+            };
+            
+            saveEquipment([...equipment, newEquipment]);
+            setEquipmentForm({ title: '', brand: '', model: '', purchaseDate: '', purchasePrice: '', maintenanceSchedule: '', notes: '' });
+            setShowModal(false);
+          };
 
-  const handleAddEquipment = () => {
-    if (!equipmentForm.title.trim()) return;
-    
-    const newEquipment = {
-      id: Date.now(),
-      ...equipmentForm,
-      createdAt: new Date().toISOString()
-    };
-    
-    saveEquipment([...equipment, newEquipment]);
-    setEquipmentForm({ title: '', brand: '', model: '', purchaseDate: '', purchasePrice: '', maintenanceSchedule: '', notes: '' });
-    setShowModal(false);
-  };
+          const handleUpdateEquipment = () => {
+            if (!equipmentForm.title.trim()) return;
+            
+            const updatedEquipment = equipment.map(item => 
+              item.id === editingItem.id 
+                ? { 
+                    ...item, 
+                    ...equipmentForm,
+                    updatedAt: new Date().toISOString()
+                  }
+                : item
+            );
+            
+            saveEquipment(updatedEquipment);
+            setEquipmentForm({ title: '', brand: '', model: '', purchaseDate: '', purchasePrice: '', maintenanceSchedule: '', notes: '' });
+            setShowModal(false);
+            setEditingItem(null);
+          };
 
-  const handleUpdateEquipment = () => {
-    if (!equipmentForm.title.trim()) return;
-    
-    const updatedEquipment = equipment.map(item => 
-      item.id === editingItem.id 
-        ? { 
-            ...item, 
-            ...equipmentForm,
-            updatedAt: new Date().toISOString()
-          }
-        : item
-    );
-    
-    saveEquipment(updatedEquipment);
-    setEquipmentForm({ title: '', brand: '', model: '', purchaseDate: '', purchasePrice: '', maintenanceSchedule: '', notes: '' });
-    setShowModal(false);
-    setEditingItem(null);
-  };
+          const handleDelete = (id, type) => {
+            if (confirm('آیا از حذف این مورد اطمینان دارید؟')) {
+              if (type === 'product') saveProducts(products.filter(item => item.id !== id));
+              if (type === 'service') saveServices(services.filter(item => item.id !== id));
+              if (type === 'material') saveMaterials(materials.filter(item => item.id !== id));
+              if (type === 'equipment') saveEquipment(equipment.filter(item => item.id !== id));
+            }
+          };
 
-  const handleDelete = (id, type) => {
-    if (confirm('آیا از حذف این مورد اطمینان دارید؟')) {
-      if (type === 'product') saveProducts(products.filter(item => item.id !== id));
-      if (type === 'service') saveServices(services.filter(item => item.id !== id));
-      if (type === 'material') saveMaterials(materials.filter(item => item.id !== id));
-      if (type === 'equipment') saveEquipment(equipment.filter(item => item.id !== id));
-    }
-  };
+          const handleEdit = (item, type) => {
+            setEditingItem(item);
+            if (type === 'product') {
+              setFormData({
+                title: item.title,
+                description: item.description,
+                price: item.price,
+                category: item.category,
+                materials: item.materials || [],
+                profitMargin: item.profitMargin || 20
+              });
+            } else if (type === 'service') {
+              setFormData({
+                title: item.title,
+                description: item.description,
+                price: item.price,
+                category: item.category,
+                materials: [],
+                profitMargin: 20
+              });
+            } else if (type === 'material') {
+              setMaterialForm({
+                title: item.title,
+                unit: item.unit,
+                pricePerUnit: item.pricePerUnit,
+                category: item.category
+              });
+            } else if (type === 'equipment') {
+              setEquipmentForm({
+                title: item.title,
+                brand: item.brand || '',
+                model: item.model || '',
+                purchaseDate: item.purchaseDate || '',
+                purchasePrice: item.purchasePrice || '',
+                maintenanceSchedule: item.maintenanceSchedule || '',
+                notes: item.notes || ''
+              });
+            }
+            setShowModal(true);
+          };
 
-  const handleEdit = (item, type) => {
-    setEditingItem(item);
-    if (type === 'product') {
-      setFormData({
-        title: item.title,
-        description: item.description,
-        price: item.price,
-        category: item.category,
-        materials: item.materials || [],
-        profitMargin: item.profitMargin || 20
-      });
-    } else if (type === 'service') {
-      setFormData({
-        title: item.title,
-        description: item.description,
-        price: item.price,
-        category: item.category,
-        materials: [],
-        profitMargin: 20
-      });
-    } else if (type === 'material') {
-      setMaterialForm({
-        title: item.title,
-        unit: item.unit,
-        pricePerUnit: item.pricePerUnit,
-        category: item.category
-      });
-    } else if (type === 'equipment') {
-      setEquipmentForm({
-        title: item.title,
-        brand: item.brand || '',
-        model: item.model || '',
-        purchaseDate: item.purchaseDate || '',
-        purchasePrice: item.purchasePrice || '',
-        maintenanceSchedule: item.maintenanceSchedule || '',
-        notes: item.notes || ''
-      });
-    }
-    setShowModal(true);
-  };
+          const resetForm = () => {
+            setFormData({
+              title: '',
+              description: '',
+              price: '',
+              category: '',
+              materials: [],
+              profitMargin: 20
+            });
+            setEditingItem(null);
+          };
 
-  const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      price: '',
-      category: '',
-      materials: [],
-      profitMargin: 20
-    });
-    setEditingItem(null);
-  };
+          const addMaterialToProduct = () => {
+            setFormData({
+              ...formData,
+              materials: [...formData.materials, { materialId: '', quantity: 1 }]
+            });
+          };
 
-  const addMaterialToProduct = () => {
-    setFormData({
-      ...formData,
-      materials: [...formData.materials, { materialId: '', quantity: 1 }]
-    });
-  };
+          const updateProductMaterial = (index, field, value) => {
+            const updated = [...formData.materials];
+            updated[index][field] = value;
+            setFormData({ ...formData, materials: updated });
+          };
 
-  const updateProductMaterial = (index, field, value) => {
-    const updated = [...formData.materials];
-    updated[index][field] = value;
-    setFormData({ ...formData, materials: updated });
-  };
+          const removeProductMaterial = (index) => {
+            setFormData({
+              ...formData,
+              materials: formData.materials.filter((_, i) => i !== index)
+            });
+          };
 
-  const removeProductMaterial = (index) => {
-    setFormData({
-      ...formData,
-      materials: formData.materials.filter((_, i) => i !== index)
-    });
-  };
+          const saveSettings = () => {
+            localStorage.setItem('theme', theme);
+            localStorage.setItem('primaryColor', primaryColor);
+            setShowSettings(false);
+          };
 
-  const saveSettings = () => {
-    localStorage.setItem('theme', theme);
-    localStorage.setItem('primaryColor', primaryColor);
-    setShowSettings(false);
-  };
+          const bgClass = theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50';
+          const cardBg = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
+          const textClass = theme === 'dark' ? 'text-gray-100' : 'text-gray-900';
+          const textSecondary = theme === 'dark' ? 'text-gray-400' : 'text-gray-600';
+          const borderClass = theme === 'dark' ? 'border-gray-700' : 'border-gray-200';
+          const inputBg = theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100';
 
-  const bgClass = theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50';
-  const cardBg = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
-  const textClass = theme === 'dark' ? 'text-gray-100' : 'text-gray-900';
-  const textSecondary = theme === 'dark' ? 'text-gray-400' : 'text-gray-600';
-  const borderClass = theme === 'dark' ? 'border-gray-700' : 'border-gray-200';
-  const inputBg = theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100';
+          const currentCost = activeTab === 'products' ? calculateProductCost(formData.materials) : 0;
+          const suggestedPrice = currentCost * (1 + formData.profitMargin / 100);
 
-  const currentCost = activeTab === 'products' ? calculateProductCost(formData.materials) : 0;
-  const suggestedPrice = currentCost * (1 + formData.profitMargin / 100);
-
-  if (loading) {
-    return (
-      <div className={`min-h-screen ${bgClass} flex items-center justify-center`}>
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: primaryColor }}></div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`min-h-screen ${bgClass} ${textClass} transition-colors duration-300`} dir="rtl">
-      {/* Header */}
-      <header className={`${cardBg} border-b ${borderClass} sticky top-0 z-40 backdrop-blur-lg bg-opacity-90`}>
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: primaryColor }}>
-                <TrendingUp className="w-6 h-6 text-white" />
+          if (loading) {
+            return (
+              <div className={`min-h-screen ${bgClass} flex items-center justify-center`}>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: primaryColor }}></div>
               </div>
-              <h1 className="text-2xl font-bold">سیستم مدیریت کسب‌وکار</h1>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => { setShowModal(true); resetForm(); }}
-                className="px-4 py-2 rounded-lg text-white font-medium transition-all hover:scale-105 active:scale-95 flex items-center gap-2 shadow-lg"
-                style={{ backgroundColor: primaryColor }}
-              >
-                <Plus className="w-5 h-5" />
-                افزودن
-              </button>
-              
-              <button
-                onClick={() => setShowSettings(true)}
-                className={`p-2 rounded-lg ${inputBg} hover:opacity-80 transition-all`}
-              >
-                <Settings className="w-5 h-5" />
-              </button>
-              
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className={`p-2 rounded-lg ${inputBg} hover:opacity-80 transition-all`}
-              >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
+            );
+          }
 
-          {/* Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {[
-              { id: 'products', label: 'محصولات', icon: Package, count: products.length },
-              { id: 'services', label: 'خدمات', icon: Briefcase, count: services.length },
-              { id: 'materials', label: 'مواد اولیه', icon: Boxes, count: materials.length },
-              { id: 'equipment', label: 'تجهیزات', icon: Wrench, count: equipment.length }
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
-                  activeTab === tab.id ? 'text-white shadow-lg' : inputBg
-                }`}
-                style={activeTab === tab.id ? { backgroundColor: primaryColor } : {}}
-              >
-                <tab.icon className="w-4 h-4" />
-                {tab.label}
-                <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === tab.id ? 'bg-white bg-opacity-20' : 'bg-gray-600 bg-opacity-30'}`}>
-                  {tab.count}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </header>
+          return (
+            <div className={`min-h-screen ${bgClass} ${textClass}`} style={{ transition: 'all 0.3s' }}>
+              <header className={`${cardBg} border-b ${borderClass} sticky top-0 z-40`} style={{ backdropFilter: 'blur(12px)', backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}>
+                <div className="max-w-7xl mx-auto px-4 py-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: primaryColor }}>
+                        <TrendingUp />
+                      </div>
+                      <h1 className="text-2xl font-bold">سیستم مدیریت کسب‌وکار</h1>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => { setShowModal(true); resetForm(); }}
+                        className="px-4 py-2 rounded-lg text-white font-medium flex items-center gap-2 shadow-lg"
+                        style={{ backgroundColor: primaryColor, transition: 'transform 0.2s' }}
+                        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                      >
+                        <Plus />
+                        افزودن
+                      </button>
+                      
+                      <button onClick={() => setShowSettings(true)} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                        <Settings />
+                      </button>
+                      
+                      <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                        {theme === 'dark' ? <Sun /> : <Moon />}
+                      </button>
+                    </div>
+                  </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {activeTab === 'products' && (
-          <ProductsSection 
-            products={products} 
-            materials={materials}
-            onEdit={(item) => handleEdit(item, 'product')}
-            onDelete={(id) => handleDelete(id, 'product')}
-            expandedProduct={expandedProduct}
-            setExpandedProduct={setExpandedProduct}
-            theme={theme}
-            primaryColor={primaryColor}
-            cardBg={cardBg}
-            textSecondary={textSecondary}
-            borderClass={borderClass}
-            inputBg={inputBg}
-            textClass={textClass}
-          />
-        )}
-
-        {activeTab === 'services' && (
-          <ServicesSection 
-            services={services}
-            onEdit={(item) => handleEdit(item, 'service')}
-            onDelete={(id) => handleDelete(id, 'service')}
-            theme={theme}
-            primaryColor={primaryColor}
-            cardBg={cardBg}
-            textSecondary={textSecondary}
-            borderClass={borderClass}
-            inputBg={inputBg}
-          />
-        )}
-
-        {activeTab === 'materials' && (
-          <MaterialsSection 
-            materials={materials}
-            onEdit={(item) => handleEdit(item, 'material')}
-            onDelete={(id) => handleDelete(id, 'material')}
-            theme={theme}
-            primaryColor={primaryColor}
-            cardBg={cardBg}
-            textSecondary={textSecondary}
-            borderClass={borderClass}
-            inputBg={inputBg}
-          />
-        )}
-
-        {activeTab === 'equipment' && (
-          <EquipmentSection 
-            equipment={equipment}
-            onEdit={(item) => handleEdit(item, 'equipment')}
-            onDelete={(id) => handleDelete(id, 'equipment')}
-            theme={theme}
-            primaryColor={primaryColor}
-            cardBg={cardBg}
-            textSecondary={textSecondary}
-            borderClass={borderClass}
-            inputBg={inputBg}
-          />
-        )}
-      </main>
-
-      {/* Add/Edit Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className={`${cardBg} rounded-2xl max-w-2xl w-full p-6 shadow-2xl my-8`}>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold">
-                {editingItem ? 'ویرایش' : 'افزودن'} {
-                  activeTab === 'products' ? 'محصول' :
-                  activeTab === 'services' ? 'خدمت' :
-                  activeTab === 'materials' ? 'ماده اولیه' :
-                  'تجهیزات'
-                }
-              </h3>
-              <button onClick={() => { setShowModal(false); resetForm(); }} className={`p-2 rounded-lg ${inputBg} hover:opacity-80`}>
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            {(activeTab === 'products' || activeTab === 'services') && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block mb-2 text-sm font-medium">عنوان *</label>
-                  <input
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} focus:outline-none focus:ring-2`}
-                    placeholder="عنوان را وارد کنید"
-                  />
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {[
+                      { id: 'products', label: 'محصولات', Icon: Package, count: products.length },
+                      { id: 'services', label: 'خدمات', Icon: Briefcase, count: services.length },
+                      { id: 'materials', label: 'مواد اولیه', Icon: Boxes, count: materials.length },
+                      { id: 'equipment', label: 'تجهیزات', Icon: Wrench, count: equipment.length }
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap ${
+                          activeTab === tab.id ? 'text-white shadow-lg' : inputBg
+                        }`}
+                        style={activeTab === tab.id ? { backgroundColor: primaryColor, transition: 'all 0.3s' } : { transition: 'all 0.3s' }}
+                      >
+                        <tab.Icon />
+                        {tab.label}
+                        <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === tab.id ? 'bg-white bg-opacity-20' : 'bg-gray-600 bg-opacity-30'}`}>
+                          {tab.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
+              </header>
 
-                <div>
-                  <label className="block mb-2 text-sm font-medium">دسته‌بندی</label>
-                  <input
-                    type="text"
-                    value={formData.category}
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} focus:outline-none focus:ring-2`}
-                    placeholder="دسته‌بندی"
-                  />
-                </div>
+              <main className="max-w-7xl mx-auto px-4 py-8">
+                {activeTab === 'products' && products.length === 0 && (
+                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                    <Package size="64" />
+                    <p className={`${textSecondary} mt-4`}>هنوز محصولی اضافه نشده است</p>
+                  </div>
+                )}
+                
+                {activeTab === 'products' && products.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {products.map(product => {
+                      const profit = product.price && product.cost ? parseFloat(product.price) - product.cost : 0;
+                      const profitPercent = product.cost > 0 ? ((parseFloat(product.price) - product.cost) / product.cost) * 100 : 0;
+                      const isExpanded = expandedProduct === product.id;
 
-                {activeTab === 'products' && (
-                  <>
-                    <div className={`${inputBg} rounded-lg p-4 border ${borderClass}`}>
-                      <div className="flex items-center justify-between mb-3">
-                        <label className="text-sm font-medium">مواد اولیه مورد نیاز</label>
+                      return (
+                        <div key={product.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'} onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}>
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Package />
+                                <h3 className="font-bold text-lg">{product.title}</h3>
+                              </div>
+                              {product.category && (
+                                <span className={`${inputBg} px-3 py-1 rounded-full text-xs inline-block`}>
+                                  {product.category}
+                                </span>
+                              )}
+                            </div>
+                            
+                            <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
+                              <button onClick={() => handleEdit(product, 'product')} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                                <Edit2 />
+                              </button>
+                              <button onClick={() => handleDelete(product.id, 'product')} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'background-color 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#ef4444'; e.currentTarget.style.color = 'white'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}>
+                                <Trash2 />
+                              </button>
+                            </div>
+                          </div>
+                          
+                          {product.description && (
+                            <p className={`${textSecondary} text-sm mb-3`}>
+                              {product.description}
+                            </p>
+                          )}
+
+                          <div className={`${inputBg} rounded-lg p-3 mb-3 space-y-2`}>
+                            <div className="flex justify-between text-sm">
+                              <span className={textSecondary}>هزینه تمام شده:</span>
+                              <span className="font-medium">{product.cost.toLocaleString('fa-IR')} تومان</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className={textSecondary}>قیمت فروش:</span>
+                              <span className="font-bold" style={{ color: primaryColor }}>
+                                {parseFloat(product.price).toLocaleString('fa-IR')} تومان
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-sm pt-2 border-t" style={{ borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db' }}>
+                              <span className={textSecondary}>سود:</span>
+                              <span className={`font-bold ${profit >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {profit.toLocaleString('fa-IR')} تومان ({profitPercent.toFixed(1)}%)
+                              </span>
+                            </div>
+                          </div>
+
+                          {product.materials && product.materials.length > 0 && (
+                            <div>
+                              <button onClick={() => setExpandedProduct(isExpanded ? null : product.id)} className={`w-full flex items-center justify-between ${inputBg} px-3 py-2 rounded-lg text-sm font-medium`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                                <span>مواد اولیه ({product.materials.length})</span>
+                                {isExpanded ? <ChevronUp /> : <ChevronDown />}
+                              </button>
+                              
+                              {isExpanded && (
+                                <div className={`mt-2 ${inputBg} rounded-lg p-3 space-y-2`}>
+                                  {product.materials.map((pm, idx) => {
+                                    const material = materials.find(m => m.id === pm.materialId);
+                                    if (!material) return null;
+                                    const itemCost = parseFloat(material.pricePerUnit) * parseFloat(pm.quantity);
+                                    return (
+                                      <div key={idx} className="text-xs flex justify-between">
+                                        <span className={textSecondary}>
+                                          {material.title} × {pm.quantity} {material.unit}
+                                        </span>
+                                        <span className="font-medium">{itemCost.toLocaleString('fa-IR')} تومان</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {activeTab === 'services' && services.length === 0 && (
+                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                    <Briefcase size="64" />
+                    <p className={`${textSecondary} mt-4`}>هنوز خدمتی اضافه نشده است</p>
+                  </div>
+                )}
+
+                {activeTab === 'services' && services.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {services.map(service => (
+                      <div key={service.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Briefcase />
+                              <h3 className="font-bold text-lg">{service.title}</h3>
+                            </div>
+                            {service.category && (
+                              <span className={`${inputBg} px-3 py-1 rounded-full text-xs inline-block`}>
+                                {service.category}
+                              </span>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
+                            <button onClick={() => handleEdit(service, 'service')} className={`p-2 rounded-lg ${inputBg}`}>
+                              <Edit2 />
+                            </button>
+                            <button onClick={() => handleDelete(service.id, 'service')} className={`p-2 rounded-lg ${inputBg}`}>
+                              <Trash2 />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {service.description && (
+                          <p className={`${textSecondary} text-sm mb-3`}>
+                            {service.description}
+                          </p>
+                        )}
+                        
+                        {service.price && (
+                          <div className="pt-3 border-t" style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
+                            <span className="font-bold text-lg" style={{ color: primaryColor }}>
+                              {parseFloat(service.price).toLocaleString('fa-IR')} تومان
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === 'materials' && materials.length === 0 && (
+                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                    <Boxes size="64" />
+                    <p className={`${textSecondary} mt-4`}>هنوز ماده اولیه‌ای اضافه نشده است</p>
+                  </div>
+                )}
+
+                {activeTab === 'materials' && materials.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {materials.map(material => (
+                      <div key={material.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Boxes />
+                              <h3 className="font-bold">{material.title}</h3>
+                            </div>
+                            {material.category && (
+                              <span className={`${inputBg} px-2 py-1 rounded-full text-xs inline-block`}>
+                                {material.category}
+                              </span>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
+                            <button onClick={() => handleEdit(material, 'material')} className={`p-2 rounded-lg ${inputBg}`}>
+                              <Edit2 />
+                            </button>
+                            <button onClick={() => handleDelete(material.id, 'material')} className={`p-2 rounded-lg ${inputBg}`}>
+                              <Trash2 />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className={`${inputBg} rounded-lg p-3 text-center`}>
+                          <div className="font-bold text-xl mb-1" style={{ color: primaryColor }}>
+                            {parseFloat(material.pricePerUnit).toLocaleString('fa-IR')}
+                          </div>
+                          <div className={`${textSecondary} text-sm`}>
+                            تومان / {material.unit}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === 'equipment' && equipment.length === 0 && (
+                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                    <Wrench size="64" />
+                    <p className={`${textSecondary} mt-4`}>هنوز تجهیزاتی اضافه نشده است</p>
+                  </div>
+                )}
+
+                {activeTab === 'equipment' && equipment.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {equipment.map(equip => (
+                      <div key={equip.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Wrench />
+                              <h3 className="font-bold text-lg">{equip.title}</h3>
+                            </div>
+                            {(equip.brand || equip.model) && (
+                              <p className={`${textSecondary} text-sm`}>
+                                {equip.brand} {equip.model}
+                              </p>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
+                            <button onClick={() => handleEdit(equip, 'equipment')} className={`p-2 rounded-lg ${inputBg}`}>
+                              <Edit2 />
+                            </button>
+                            <button onClick={() => handleDelete(equip.id, 'equipment')} className={`p-2 rounded-lg ${inputBg}`}>
+                              <Trash2 />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2 mb-3">
+                          {equip.purchaseDate && (
+                            <div className="flex justify-between text-sm">
+                              <span className={textSecondary}>تاریخ خرید:</span>
+                              <span>{new Date(equip.purchaseDate).toLocaleDateString('fa-IR')}</span>
+                            </div>
+                          )}
+                          {equip.purchasePrice && (
+                            <div className="flex justify-between text-sm">
+                              <span className={textSecondary}>قیمت خرید:</span>
+                              <span className="font-medium">{parseFloat(equip.purchasePrice).toLocaleString('fa-IR')} تومان</span>
+                            </div>
+                          )}
+                          {equip.maintenanceSchedule && (
+                            <div className="flex justify-between text-sm">
+                              <span className={textSecondary}>نگهداری:</span>
+                              <span>{equip.maintenanceSchedule}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {equip.notes && (
+                          <p className={`${textSecondary} text-sm pt-3 border-t`} style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
+                            {equip.notes}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </main>
+
+              {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" style={{ overflowY: 'auto' }}>
+                  <div className={`${cardBg} rounded-2xl max-w-2xl w-full p-6 shadow-2xl my-8`}>
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-bold">
+                        {editingItem ? 'ویرایش' : 'افزودن'} {
+                          activeTab === 'products' ? 'محصول' :
+                          activeTab === 'services' ? 'خدمت' :
+                          activeTab === 'materials' ? 'ماده اولیه' :
+                          'تجهیزات'
+                        }
+                      </h3>
+                      <button onClick={() => { setShowModal(false); resetForm(); }} className={`p-2 rounded-lg ${inputBg}`}>
+                        <X />
+                      </button>
+                    </div>
+                    
+                    {(activeTab === 'products' || activeTab === 'services') && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">عنوان *</label>
+                          <input
+                            type="text"
+                            value={formData.title}
+                            onChange={(e) => setFormData({...formData, title: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            style={{ outline: 'none' }}
+                            placeholder="عنوان را وارد کنید"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">دسته‌بندی</label>
+                          <input
+                            type="text"
+                            value={formData.category}
+                            onChange={(e) => setFormData({...formData, category: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            style={{ outline: 'none' }}
+                            placeholder="دسته‌بندی"
+                          />
+                        </div>
+
+                        {activeTab === 'products' && (
+                          <>
+                            <div className={`${inputBg} rounded-lg p-4 border ${borderClass}`}>
+                              <div className="flex items-center justify-between mb-3">
+                                <label className="text-sm font-medium">مواد اولیه مورد نیاز</label>
+                                <button
+                                  onClick={addMaterialToProduct}
+                                  className="px-3 py-1 rounded-lg text-white text-sm font-medium"
+                                  style={{ backgroundColor: primaryColor }}
+                                >
+                                  <Plus />
+                                </button>
+                              </div>
+                              
+                              {formData.materials.length === 0 ? (
+                                <p className={`${textSecondary} text-sm text-center py-4`}>
+                                  هنوز ماده اولیه‌ای اضافه نشده
+                                </p>
+                              ) : (
+                                <div className="space-y-2">
+                                  {formData.materials.map((pm, index) => (
+                                    <div key={index} className="flex gap-2 items-center">
+                                      <select
+                                        value={pm.materialId}
+                                        onChange={(e) => updateProductMaterial(index, 'materialId', e.target.value)}
+                                        className={`flex-1 px-3 py-2 rounded-lg border ${borderClass} text-sm`}
+                                        style={{ backgroundColor: theme === 'dark' ? '#4b5563' : 'white' }}
+                                      >
+                                        <option value="">انتخاب ماده اولیه</option>
+                                        {materials.map(mat => (
+                                          <option key={mat.id} value={mat.id}>
+                                            {mat.title} ({mat.pricePerUnit.toLocaleString('fa-IR')} تومان / {mat.unit})
+                                          </option>
+                                        ))}
+                                      </select>
+                                      <input
+                                        type="number"
+                                        value={pm.quantity}
+                                        onChange={(e) => updateProductMaterial(index, 'quantity', e.target.value)}
+                                        className={`w-20 px-3 py-2 rounded-lg border ${borderClass} text-sm`}
+                                        style={{ backgroundColor: theme === 'dark' ? '#4b5563' : 'white' }}
+                                        placeholder="تعداد"
+                                        min="0"
+                                        step="0.01"
+                                      />
+                                      <button
+                                        onClick={() => removeProductMaterial(index)}
+                                        className="p-2 rounded-lg"
+                                        style={{ transition: 'background-color 0.2s' }}
+                                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#ef4444'; e.currentTarget.style.color = 'white'; }}
+                                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}
+                                      >
+                                        <Trash2 />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {currentCost > 0 && (
+                              <div className={`${inputBg} rounded-lg p-4 border ${borderClass} space-y-3`}>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium">هزینه تمام شده:</span>
+                                  <span className="font-bold" style={{ color: primaryColor }}>
+                                    {currentCost.toLocaleString('fa-IR')} تومان
+                                  </span>
+                                </div>
+                                
+                                <div>
+                                  <label className="block mb-2 text-sm font-medium">حاشیه سود (%)</label>
+                                  <input
+                                    type="number"
+                                    value={formData.profitMargin}
+                                    onChange={(e) => setFormData({...formData, profitMargin: parseFloat(e.target.value) || 0})}
+                                    className={`w-full px-4 py-2 rounded-lg border ${borderClass}`}
+                                    style={{ backgroundColor: theme === 'dark' ? '#4b5563' : 'white' }}
+                                    min="0"
+                                    step="1"
+                                  />
+                                </div>
+
+                                <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: theme === 'dark' ? '#4b5563' : '#e5e7eb' }}>
+                                  <span className="text-sm font-medium">قیمت پیشنهادی:</span>
+                                  <span className="font-bold text-lg" style={{ color: primaryColor }}>
+                                    {suggestedPrice.toLocaleString('fa-IR')} تومان
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">قیمت فروش (تومان) *</label>
+                          <input
+                            type="text"
+                            value={formData.price}
+                            onChange={(e) => setFormData({...formData, price: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            placeholder={activeTab === 'products' && suggestedPrice > 0 ? suggestedPrice.toFixed(0) : "قیمت"}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">توضیحات</label>
+                          <textarea
+                            value={formData.description}
+                            onChange={(e) => setFormData({...formData, description: e.target.value})}
+                            rows="3"
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            style={{ resize: 'none' }}
+                            placeholder="توضیحات تکمیلی"
+                          />
+                        </div>
+
                         <button
-                          onClick={addMaterialToProduct}
-                          className="px-3 py-1 rounded-lg text-white text-sm font-medium transition-all hover:scale-105"
+                          onClick={activeTab === 'products' ? (editingItem ? handleUpdateProduct : handleAddProduct) : (editingItem ? handleUpdateService : handleAddService)}
+                          className="w-full py-3 rounded-lg text-white font-medium"
                           style={{ backgroundColor: primaryColor }}
                         >
-                          <Plus className="w-4 h-4" />
+                          {editingItem ? 'بروزرسانی' : 'افزودن'}
                         </button>
                       </div>
-                      
-                      {formData.materials.length === 0 ? (
-                        <p className={`${textSecondary} text-sm text-center py-4`}>
-                          هنوز ماده اولیه‌ای اضافه نشده
-                        </p>
-                      ) : (
-                        <div className="space-y-2">
-                          {formData.materials.map((pm, index) => (
-                            <div key={index} className="flex gap-2 items-center">
-                              <select
-                                value={pm.materialId}
-                                onChange={(e) => updateProductMaterial(index, 'materialId', e.target.value)}
-                                className={`flex-1 px-3 py-2 rounded-lg ${theme === 'dark' ? 'bg-gray-600' : 'bg-
+                    )}
+
+                    {activeTab === 'materials' && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">نام ماده اولیه *</label>
+                          <input
+                            type="text"
+                            value={materialForm.title}
+                            onChange={(e) => setMaterialForm({...materialForm, title: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            placeholder="مثال: پارچه، رنگ، چوب، ..."
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">دسته‌بندی</label>
+                          <input
+                            type="text"
+                            value={materialForm.category}
+                            onChange={(e) => setMaterialForm({...materialForm, category: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            placeholder="دسته‌بندی"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block mb-2 text-sm font-medium">واحد اندازه‌گیری *</label>
+                            <select
+                              value={materialForm.unit}
+                              onChange={(e) => setMaterialForm({...materialForm, unit: e.target.value})}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            >
+                              <option value="عدد">عدد</option>
+                              <option value="کیلوگرم">کیلوگرم</option>
+                              <option value="گرم">گرم</option>
+                              <option value="متر">متر</option>
+                              <option value="سانتی‌متر">سانتی‌متر</option>
+                              <option value="لیتر">لیتر</option>
+                              <option value="میلی‌لیتر">میلی‌لیتر</option>
+                              <option value="بسته">بسته</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block mb-2 text-sm font-medium">قیمت هر واحد (تومان) *</label>
+                            <input
+                              type="text"
+                              value={materialForm.pricePerUnit}
+                              onChange={(e) => setMaterialForm({...materialForm, pricePerUnit: e.target.value})}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              placeholder="قیمت"
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={editingItem ? handleUpdateMaterial : handleAddMaterial}
+                          className="w-full py-3 rounded-lg text-white font-medium"
+                          style={{ backgroundColor: primaryColor }}
+                        >
+                          {editingItem ? 'بروزرسانی' : 'افزودن'}
+                        </button>
+                      </div>
+                    )}
+
+                    {activeTab === 'equipment' && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">نام تجهیزات *</label>
+                          <input
+                            type="text"
+                            value={equipmentForm.title}
+                            onChange={(e) => setEquipmentForm({...equipmentForm, title: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            placeholder="مثال: دستگاه برش، کامپیوتر، ..."
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block mb-2 text-sm font-medium">برند</label>
+                            <input
+                              type="text"
+                              value={equipmentForm.brand}
+                              onChange={(e) => setEquipmentForm({...equipmentForm, brand: e.target.value})}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              placeholder="برند"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block mb-2 text-sm font-medium">مدل</label>
+                            <input
+                              type="text"
+                              value={equipmentForm.model}
+                              onChange={(e) => setEquipmentForm({...equipmentForm, model: e.target.value})}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              placeholder="مدل"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block mb-2 text-sm font-medium">تاریخ خرید</label>
+                            <input
+                              type="date"
+                              value={equipmentForm.purchaseDate}
+                              onChange={(e) => setEquipmentForm({...equipmentForm, purchaseDate: e.target.value})}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block mb-2 text-sm font-medium">قیمت خرید (تومان)</label>
+                            <input
+                              type="text"
+                              value={equipmentForm.purchasePrice}
+                              onChange={(e) => setEquipmentForm({...equipmentForm, purchasePrice: e.target.value})}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              placeholder="قیمت"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">برنامه نگهداری</label>
+                          <input
+                            type="text"
+                            value={equipmentForm.maintenanceSchedule}
+                            onChange={(e) => setEquipmentForm({...equipmentForm, maintenanceSchedule: e.target.value})}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            placeholder="مثال: هر 6 ماه یکبار"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">یادداشت‌ها</label>
+                          <textarea
+                            value={equipmentForm.notes}
+                            onChange={(e) => setEquipmentForm({...equipmentForm, notes: e.target.value})}
+                            rows="3"
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                            style={{ resize: 'none' }}
+                            placeholder="یادداشت‌های تکمیلی"
+                          />
+                        </div>
+
+                        <button
+                          onClick={editingItem ? handleUpdateEquipment : handleAddEquipment}
+                          className="w-full py-3 rounded-lg text-white font-medium"
+                          style={{ backgroundColor: primaryColor }}
+                        >
+                          {editingItem ? 'بروزرسانی' : 'افزودن'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {showSettings && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                  <div className={`${cardBg} rounded-2xl max-w-md w-full p-6 shadow-2xl`}>
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-bold">تنظیمات</h3>
+                      <button onClick={() => setShowSettings(false)} className={`p-2 rounded-lg ${inputBg}`}>
+                        <X />
+                      </button>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block mb-3 text-sm font-medium">تم</label>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setTheme('dark')}
+                            className={`flex-1 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
+                              theme === 'dark' ? 'text-white' : inputBg
+                            }`}
+                            style={theme === 'dark' ? { backgroundColor: primaryColor, transition: 'all 0.3s' } : { transition: 'all 0.3s' }}
+                          >
+                            <Moon />
+                            تیره
+                          </button>
+                          <button
+                            onClick={() => setTheme('light')}
+                            className={`flex-1 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
+                              theme === 'light' ? 'text-white' : inputBg
+                            }`}
+                            style={theme === 'light' ? { backgroundColor: primaryColor, transition: 'all 0.3s' } : { transition: 'all 0.3s' }}
+                          >
+                            <Sun />
+                            روشن
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block mb-3 text-sm font-medium">رنگ اصلی</label>
+                        <div className="grid grid-cols-5 gap-3">
+                          {['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444', '#06b6d4', '#6366f1', '#f97316', '#84cc16'].map(color => (
+                            <button
+                              key={color}
+                              onClick={() => setPrimaryColor(color)}
+                              className={`w-12 h-12 rounded-xl ${
+                                primaryColor === color ? 'ring-4 ring-offset-2' : ''
+                              }`}
+                              style={{ 
+                                backgroundColor: color,
+                                ringColor: color,
+                                ringOffsetColor: theme === 'dark' ? '#1f2937' : '#fff',
+                                transition: 'transform 0.2s'
+                              }}
+                              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={saveSettings}
+                        className="w-full py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2"
+                        style={{ backgroundColor: primaryColor }}
+                      >
+                        <Save />
+                        ذخیره تنظیمات
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
