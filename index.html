@@ -8,9 +8,10 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * { font-family: system-ui, -apple-system, sans-serif; }
+        * { font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif; }
+        @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+        .icon-center { display: inline-flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
@@ -19,22 +20,23 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
         
-        // Lucide icons
-        const Plus = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>;
-        const Edit2 = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>;
-        const Trash2 = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>;
-        const Settings = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>;
-        const Moon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
-        const Sun = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>;
-        const Save = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>;
-        const X = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
-        const Package = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>;
-        const Briefcase = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
-        const Wrench = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
-        const TrendingUp = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
-        const Boxes = (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props.size || "20"} height={props.size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/></svg>;
-        const ChevronDown = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
-        const ChevronUp = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>;
+        // SVG Icons - inline for simplicity
+        const Plus = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5v14"/></svg>;
+        const Edit2 = () => <svg className="icon-center" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>;
+        const Trash2 = () => <svg className="icon-center" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>;
+        const Settings = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"/></svg>;
+        const Moon = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
+        const Sun = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>;
+        const Save = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>;
+        const X = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12"/></svg>;
+        const Search = () => <svg className="icon-center" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>;
+        const Package = ({size}) => <svg className="icon-center" width={size || "20"} height={size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m7.5 4.27 9 5.15M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16ZM3.3 7l8.7 5 8.7-5M12 22V12"/></svg>;
+        const Briefcase = ({size}) => <svg className="icon-center" width={size || "20"} height={size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
+        const Wrench = ({size}) => <svg className="icon-center" width={size || "20"} height={size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
+        const TrendingUp = () => <svg className="icon-center" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
+        const Boxes = ({size}) => <svg className="icon-center" width={size || "20"} height={size || "20"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42ZM7 16.5l-4.74-2.85M7 16.5l5-3M7 16.5v5.17M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3ZM17 16.5l-5-3M17 16.5l4.74-2.85M17 16.5v5.17M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8ZM12 8L7.26 5.15M12 8l4.74-2.85M12 13.5V8"/></svg>;
+        const ChevronDown = () => <svg className="icon-center" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>;
+        const ChevronUp = () => <svg className="icon-center" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m18 15-6-6-6 6"/></svg>;
 
         function App() {
           const [products, setProducts] = useState([]);
@@ -49,6 +51,7 @@
           const [primaryColor, setPrimaryColor] = useState('#3b82f6');
           const [loading, setLoading] = useState(true);
           const [expandedProduct, setExpandedProduct] = useState(null);
+          const [searchQuery, setSearchQuery] = useState('');
           
           const [formData, setFormData] = useState({
             title: '',
@@ -84,51 +87,67 @@
             setPrimaryColor(savedColor);
           }, []);
 
-          useEffect(() => {
-            document.documentElement.style.setProperty('--primary-color', primaryColor);
-          }, [primaryColor]);
-
           const loadData = () => {
             try {
-              const savedProducts = localStorage.getItem('products');
-              const savedServices = localStorage.getItem('services');
-              const savedMaterials = localStorage.getItem('materials');
-              const savedEquipment = localStorage.getItem('equipment');
-              
-              if (savedProducts) setProducts(JSON.parse(savedProducts));
-              if (savedServices) setServices(JSON.parse(savedServices));
-              if (savedMaterials) setMaterials(JSON.parse(savedMaterials));
-              if (savedEquipment) setEquipment(JSON.parse(savedEquipment));
+              const saved = localStorage.getItem('businessData');
+              if (saved) {
+                const data = JSON.parse(saved);
+                setProducts(data.products || []);
+                setServices(data.services || []);
+                setMaterials(data.materials || []);
+                setEquipment(data.equipment || []);
+              } else {
+                // Default materials
+                setMaterials([
+                  { id: 1, title: 'جوهر سابلیمیشن (100ml)', unit: 'میلی‌لیتر', pricePerUnit: '15000', category: 'مواد چاپ' },
+                  { id: 2, title: 'پارچه پلی‌استر (متر)', unit: 'متر', pricePerUnit: '45000', category: 'پارچه' },
+                  { id: 3, title: 'کاغذ سابلیمیشن A4', unit: 'برگ', pricePerUnit: '2000', category: 'مواد چاپ' },
+                  { id: 4, title: 'لیبل برچسب', unit: 'عدد', pricePerUnit: '500', category: 'بسته‌بندی' },
+                  { id: 5, title: 'ماگ سفید ساده', unit: 'عدد', pricePerUnit: '12000', category: 'محصول خام' },
+                  { id: 6, title: 'تیشرت سفید کتان', unit: 'عدد', pricePerUnit: '35000', category: 'محصول خام' },
+                  { id: 7, title: 'بج پین', unit: 'عدد', pricePerUnit: '1500', category: 'محصول خام' }
+                ]);
+              }
             } catch (error) {
-              console.error('Error loading data:', error);
+              console.error('خطا در بارگذاری داده:', error);
             }
             setLoading(false);
           };
 
+          const saveAllData = (newProducts, newServices, newMaterials, newEquipment) => {
+            const data = {
+              products: newProducts,
+              services: newServices,
+              materials: newMaterials,
+              equipment: newEquipment
+            };
+            localStorage.setItem('businessData', JSON.stringify(data));
+          };
+
           const saveProducts = (data) => {
-            localStorage.setItem('products', JSON.stringify(data));
             setProducts(data);
+            saveAllData(data, services, materials, equipment);
           };
 
           const saveServices = (data) => {
-            localStorage.setItem('services', JSON.stringify(data));
             setServices(data);
+            saveAllData(products, data, materials, equipment);
           };
 
           const saveMaterials = (data) => {
-            localStorage.setItem('materials', JSON.stringify(data));
             setMaterials(data);
+            saveAllData(products, services, data, equipment);
           };
 
           const saveEquipment = (data) => {
-            localStorage.setItem('equipment', JSON.stringify(data));
             setEquipment(data);
+            saveAllData(products, services, materials, data);
           };
 
           const calculateProductCost = (productMaterials) => {
             if (!productMaterials || productMaterials.length === 0) return 0;
             return productMaterials.reduce((total, pm) => {
-              const material = materials.find(m => m.id === pm.materialId);
+              const material = materials.find(m => String(m.id) === String(pm.materialId));
               if (material && material.pricePerUnit && pm.quantity) {
                 return total + (parseFloat(material.pricePerUnit) * parseFloat(pm.quantity));
               }
@@ -219,7 +238,7 @@
           };
 
           const handleAddMaterial = () => {
-            if (!materialForm.title.trim()) return;
+            if (!materialForm.title.trim() || !materialForm.pricePerUnit) return;
             
             const newMaterial = {
               id: Date.now(),
@@ -236,7 +255,7 @@
           };
 
           const handleUpdateMaterial = () => {
-            if (!materialForm.title.trim()) return;
+            if (!materialForm.title.trim() || !materialForm.pricePerUnit) return;
             
             const updatedMaterials = materials.map(item => 
               item.id === editingItem.id 
@@ -257,13 +276,13 @@
           const handleAddEquipment = () => {
             if (!equipmentForm.title.trim()) return;
             
-            const newEquipment = {
+            const newEquip = {
               id: Date.now(),
               ...equipmentForm,
               createdAt: new Date().toISOString()
             };
             
-            saveEquipment([...equipment, newEquipment]);
+            saveEquipment([...equipment, newEquip]);
             setEquipmentForm({ title: '', brand: '', model: '', purchaseDate: '', purchasePrice: '', maintenanceSchedule: '', notes: '' });
             setShowModal(false);
           };
@@ -352,7 +371,7 @@
           const addMaterialToProduct = () => {
             setFormData({
               ...formData,
-              materials: [...formData.materials, { materialId: '', quantity: 1 }]
+              materials: [...formData.materials, { materialId: '', quantity: '' }]
             });
           };
 
@@ -375,6 +394,15 @@
             setShowSettings(false);
           };
 
+          const filterItems = (items) => {
+            if (!searchQuery) return items;
+            return items.filter(item => 
+              item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              (item.category && item.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
+              (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()))
+            );
+          };
+
           const bgClass = theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50';
           const cardBg = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
           const textClass = theme === 'dark' ? 'text-gray-100' : 'text-gray-900';
@@ -383,7 +411,12 @@
           const inputBg = theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100';
 
           const currentCost = activeTab === 'products' ? calculateProductCost(formData.materials) : 0;
-          const suggestedPrice = currentCost * (1 + formData.profitMargin / 100);
+          const suggestedPrice = currentCost > 0 ? (currentCost * (1 + formData.profitMargin / 100)).toFixed(0) : '';
+
+          const filteredProducts = filterItems(products);
+          const filteredServices = filterItems(services);
+          const filteredMaterials = filterItems(materials);
+          const filteredEquipment = filterItems(equipment);
 
           if (loading) {
             return (
@@ -395,6 +428,7 @@
 
           return (
             <div className={`min-h-screen ${bgClass} ${textClass}`} style={{ transition: 'all 0.3s' }}>
+              {/* Header */}
               <header className={`${cardBg} border-b ${borderClass} sticky top-0 z-40`} style={{ backdropFilter: 'blur(12px)', backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}>
                 <div className="max-w-7xl mx-auto px-4 py-4">
                   <div className="flex items-center justify-between mb-4">
@@ -406,27 +440,22 @@
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => { setShowModal(true); resetForm(); }}
-                        className="px-4 py-2 rounded-lg text-white font-medium flex items-center gap-2 shadow-lg"
-                        style={{ backgroundColor: primaryColor, transition: 'transform 0.2s' }}
-                        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                      >
+                      <button onClick={() => { setShowModal(true); resetForm(); }} className="px-4 py-2 rounded-lg text-white font-medium flex items-center gap-2" style={{ backgroundColor: primaryColor }}>
                         <Plus />
                         افزودن
                       </button>
                       
-                      <button onClick={() => setShowSettings(true)} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                      <button onClick={() => setShowSettings(true)} className={`p-2 rounded-lg ${inputBg}`}>
                         <Settings />
                       </button>
                       
-                      <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                      <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`p-2 rounded-lg ${inputBg}`}>
                         {theme === 'dark' ? <Sun /> : <Moon />}
                       </button>
                     </div>
                   </div>
 
+                  {/* Tabs */}
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {[
                       { id: 'products', label: 'محصولات', Icon: Package, count: products.length },
@@ -436,11 +465,9 @@
                     ].map(tab => (
                       <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap ${
-                          activeTab === tab.id ? 'text-white shadow-lg' : inputBg
-                        }`}
-                        style={activeTab === tab.id ? { backgroundColor: primaryColor, transition: 'all 0.3s' } : { transition: 'all 0.3s' }}
+                        onClick={() => { setActiveTab(tab.id); setSearchQuery(''); }}
+                        className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id ? 'text-white' : inputBg}`}
+                        style={activeTab === tab.id ? { backgroundColor: primaryColor } : {}}
                       >
                         <tab.Icon />
                         {tab.label}
@@ -453,283 +480,305 @@
                 </div>
               </header>
 
+              {/* Main */}
               <main className="max-w-7xl mx-auto px-4 py-8">
-                {activeTab === 'products' && products.length === 0 && (
-                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
-                    <Package size="64" />
-                    <p className={`${textSecondary} mt-4`}>هنوز محصولی اضافه نشده است</p>
+                {/* Search */}
+                <div className="mb-6">
+                  <div className={`${inputBg} rounded-lg px-4 py-3 flex items-center gap-3 border ${borderClass}`}>
+                    <Search />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder={`جستجو در ${activeTab === 'products' ? 'محصولات' : activeTab === 'services' ? 'خدمات' : activeTab === 'materials' ? 'مواد اولیه' : 'تجهیزات'}...`}
+                      className={`flex-1 bg-transparent outline-none ${textClass}`}
+                    />
                   </div>
-                )}
-                
-                {activeTab === 'products' && products.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {products.map(product => {
-                      const cost = calculateProductCost(product.materials);
-                      const profit = product.price && cost ? parseFloat(product.price) - cost : 0;
-                      const profitPercent = cost > 0 ? ((parseFloat(product.price) - cost) / cost) * 100 : 0;
-                      const isExpanded = expandedProduct === product.id;
+                </div>
 
-                      return (
-                        <div key={product.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'} onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}>
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Package />
-                                <h3 className="font-bold text-lg">{product.title}</h3>
+                {/* Products */}
+                {activeTab === 'products' && (
+                  <>
+                    {filteredProducts.length === 0 && (
+                      <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                        <Package size="64" />
+                        <p className={`${textSecondary} mt-4`}>{searchQuery ? 'محصولی یافت نشد' : 'هنوز محصولی اضافه نشده است'}</p>
+                      </div>
+                    )}
+                    
+                    {filteredProducts.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredProducts.map(product => {
+                          const cost = calculateProductCost(product.materials);
+                          const price = parseFloat(product.price) || 0;
+                          const profit = price - cost;
+                          const profitPercent = cost > 0 ? (profit / cost) * 100 : 0;
+                          const isExpanded = expandedProduct === product.id;
+
+                          return (
+                            <div key={product.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group hover:shadow-xl transition-all`}>
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Package />
+                                    <h3 className="font-bold text-lg">{product.title}</h3>
+                                  </div>
+                                  {product.category && (
+                                    <span className={`${inputBg} px-3 py-1 rounded-full text-xs`}>{product.category}</span>
+                                  )}
+                                </div>
+                                
+                                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <button onClick={() => handleEdit(product, 'product')} className={`p-2 rounded-lg ${inputBg}`}>
+                                    <Edit2 />
+                                  </button>
+                                  <button onClick={() => handleDelete(product.id, 'product')} className={`p-2 rounded-lg ${inputBg} hover:bg-red-500 hover:text-white`}>
+                                    <Trash2 />
+                                  </button>
+                                </div>
                               </div>
-                              {product.category && (
-                                <span className={`${inputBg} px-3 py-1 rounded-full text-xs inline-block`}>
-                                  {product.category}
-                                </span>
-                              )}
-                            </div>
-                            
-                            <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
-                              <button onClick={() => handleEdit(product, 'product')} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
-                                <Edit2 />
-                              </button>
-                              <button onClick={() => handleDelete(product.id, 'product')} className={`p-2 rounded-lg ${inputBg}`} style={{ transition: 'background-color 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#ef4444'; e.currentTarget.style.color = 'white'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}>
-                                <Trash2 />
-                              </button>
-                            </div>
-                          </div>
-                          
-                          {product.description && (
-                            <p className={`${textSecondary} text-sm mb-3`}>
-                              {product.description}
-                            </p>
-                          )}
-
-                          <div className={`${inputBg} rounded-lg p-3 mb-3 space-y-2`}>
-                            <div className="flex justify-between text-sm">
-                              <span className={textSecondary}>هزینه تمام شده:</span>
-                              <span className="font-medium">{cost.toLocaleString('fa-IR')} تومان</span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className={textSecondary}>قیمت فروش:</span>
-                              <span className="font-bold" style={{ color: primaryColor }}>
-                                {parseFloat(product.price || 0).toLocaleString('fa-IR')} تومان
-                              </span>
-                            </div>
-                            <div className="flex justify-between text-sm pt-2 border-t" style={{ borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db' }}>
-                              <span className={textSecondary}>سود:</span>
-                              <span className={`font-bold ${profit >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {profit.toLocaleString('fa-IR')} تومان ({profitPercent.toFixed(1)}%)
-                              </span>
-                            </div>
-                          </div>
-
-                          {product.materials && product.materials.length > 0 && (
-                            <div>
-                              <button onClick={() => setExpandedProduct(isExpanded ? null : product.id)} className={`w-full flex items-center justify-between ${inputBg} px-3 py-2 rounded-lg text-sm font-medium`} style={{ transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
-                                <span>مواد اولیه ({product.materials.length})</span>
-                                {isExpanded ? <ChevronUp /> : <ChevronDown />}
-                              </button>
                               
-                              {isExpanded && (
-                                <div className={`mt-2 ${inputBg} rounded-lg p-3 space-y-2`}>
-                                  {product.materials.map((pm, idx) => {
-                                    const material = materials.find(m => m.id === pm.materialId);
-                                    if (!material) return (
-                                      <div key={idx} className="text-xs text-red-500">
-                                        ماده اولیه حذف شده است
-                                      </div>
-                                    );
-                                    const itemCost = parseFloat(material.pricePerUnit) * parseFloat(pm.quantity);
-                                    return (
-                                      <div key={idx} className="text-xs flex justify-between">
-                                        <span className={textSecondary}>
-                                          {material.title} × {pm.quantity} {material.unit}
-                                        </span>
-                                        <span className="font-medium">{itemCost.toLocaleString('fa-IR')} تومان</span>
-                                      </div>
-                                    );
-                                  })}
+                              {product.description && (
+                                <p className={`${textSecondary} text-sm mb-3`}>{product.description}</p>
+                              )}
+
+                              <div className={`${inputBg} rounded-lg p-3 mb-3 space-y-2`}>
+                                <div className="flex justify-between text-sm">
+                                  <span className={textSecondary}>هزینه تمام شده:</span>
+                                  <span className="font-medium">{cost.toLocaleString('fa-IR')} تومان</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                  <span className={textSecondary}>قیمت فروش:</span>
+                                  <span className="font-bold" style={{ color: primaryColor }}>
+                                    {price.toLocaleString('fa-IR')} تومان
+                                  </span>
+                                </div>
+                                <div className="flex justify-between text-sm pt-2 border-t" style={{ borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db' }}>
+                                  <span className={textSecondary}>سود:</span>
+                                  <span className={`font-bold ${profit >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {profit.toLocaleString('fa-IR')} تومان ({profitPercent.toFixed(1)}%)
+                                  </span>
+                                </div>
+                              </div>
+
+                              {product.materials && product.materials.length > 0 && (
+                                <div>
+                                  <button onClick={() => setExpandedProduct(isExpanded ? null : product.id)} className={`w-full flex items-center justify-between ${inputBg} px-3 py-2 rounded-lg text-sm font-medium`}>
+                                    <span>مواد اولیه ({product.materials.length})</span>
+                                    {isExpanded ? <ChevronUp /> : <ChevronDown />}
+                                  </button>
+                                  
+                                  {isExpanded && (
+                                    <div className={`mt-2 ${inputBg} rounded-lg p-3 space-y-2`}>
+                                      {product.materials.map((pm, idx) => {
+                                        const material = materials.find(m => String(m.id) === String(pm.materialId));
+                                        if (!material) return (
+                                          <div key={idx} className="text-xs text-red-500">ماده اولیه حذف شده</div>
+                                        );
+                                        const itemCost = parseFloat(material.pricePerUnit) * parseFloat(pm.quantity);
+                                        return (
+                                          <div key={idx} className="text-xs flex justify-between">
+                                            <span className={textSecondary}>
+                                              {material.title} × {pm.quantity} {material.unit}
+                                            </span>
+                                            <span className="font-medium">{itemCost.toLocaleString('fa-IR')} تومان</span>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
                 )}
 
-                {activeTab === 'services' && services.length === 0 && (
-                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
-                    <Briefcase size="64" />
-                    <p className={`${textSecondary} mt-4`}>هنوز خدمتی اضافه نشده است</p>
-                  </div>
-                )}
+                {/* Services */}
+                {activeTab === 'services' && (
+                  <>
+                    {filteredServices.length === 0 && (
+                      <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                        <Briefcase size="64" />
+                        <p className={`${textSecondary} mt-4`}>{searchQuery ? 'خدمتی یافت نشد' : 'هنوز خدمتی اضافه نشده است'}</p>
+                      </div>
+                    )}
 
-                {activeTab === 'services' && services.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {services.map(service => (
-                      <div key={service.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Briefcase />
-                              <h3 className="font-bold text-lg">{service.title}</h3>
+                    {filteredServices.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredServices.map(service => (
+                          <div key={service.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group hover:shadow-xl transition-all`}>
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Briefcase />
+                                  <h3 className="font-bold text-lg">{service.title}</h3>
+                                </div>
+                                {service.category && (
+                                  <span className={`${inputBg} px-3 py-1 rounded-full text-xs`}>{service.category}</span>
+                                )}
+                              </div>
+                              
+                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => handleEdit(service, 'service')} className={`p-2 rounded-lg ${inputBg}`}>
+                                  <Edit2 />
+                                </button>
+                                <button onClick={() => handleDelete(service.id, 'service')} className={`p-2 rounded-lg ${inputBg} hover:bg-red-500 hover:text-white`}>
+                                  <Trash2 />
+                                </button>
+                              </div>
                             </div>
-                            {service.category && (
-                              <span className={`${inputBg} px-3 py-1 rounded-full text-xs inline-block`}>
-                                {service.category}
-                              </span>
+                            
+                            {service.description && (
+                              <p className={`${textSecondary} text-sm mb-3`}>{service.description}</p>
+                            )}
+                            
+                            {service.price && (
+                              <div className="pt-3 border-t" style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
+                                <span className="font-bold text-lg" style={{ color: primaryColor }}>
+                                  {parseFloat(service.price).toLocaleString('fa-IR')} تومان
+                                </span>
+                              </div>
                             )}
                           </div>
-                          
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
-                            <button onClick={() => handleEdit(service, 'service')} className={`p-2 rounded-lg ${inputBg}`}>
-                              <Edit2 />
-                            </button>
-                            <button onClick={() => handleDelete(service.id, 'service')} className={`p-2 rounded-lg ${inputBg}`}>
-                              <Trash2 />
-                            </button>
-                          </div>
-                        </div>
-                        
-                        {service.description && (
-                          <p className={`${textSecondary} text-sm mb-3`}>
-                            {service.description}
-                          </p>
-                        )}
-                        
-                        {service.price && (
-                          <div className="pt-3 border-t" style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
-                            <span className="font-bold text-lg" style={{ color: primaryColor }}>
-                              {parseFloat(service.price).toLocaleString('fa-IR')} تومان
-                            </span>
-                          </div>
-                        )}
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 )}
 
-                {activeTab === 'materials' && materials.length === 0 && (
-                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
-                    <Boxes size="64" />
-                    <p className={`${textSecondary} mt-4`}>هنوز ماده اولیه‌ای اضافه نشده است</p>
-                  </div>
-                )}
-
-                {activeTab === 'materials' && materials.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {materials.map(material => (
-                      <div key={material.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Boxes />
-                              <h3 className="font-bold">{material.title}</h3>
-                            </div>
-                            {material.category && (
-                              <span className={`${inputBg} px-2 py-1 rounded-full text-xs inline-block`}>
-                                {material.category}
-                              </span>
-                            )}
-                          </div>
-                          
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
-                            <button onClick={() => handleEdit(material, 'material')} className={`p-2 rounded-lg ${inputBg}`}>
-                              <Edit2 />
-                            </button>
-                            <button onClick={() => handleDelete(material.id, 'material')} className={`p-2 rounded-lg ${inputBg}`}>
-                              <Trash2 />
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <div className={`${inputBg} rounded-lg p-3 text-center`}>
-                          <div className="font-bold text-xl mb-1" style={{ color: primaryColor }}>
-                            {parseFloat(material.pricePerUnit).toLocaleString('fa-IR')}
-                          </div>
-                          <div className={`${textSecondary} text-sm`}>
-                            تومان / {material.unit}
-                          </div>
-                        </div>
+                {/* Materials */}
+                {activeTab === 'materials' && (
+                  <>
+                    {filteredMaterials.length === 0 && (
+                      <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                        <Boxes size="64" />
+                        <p className={`${textSecondary} mt-4`}>{searchQuery ? 'ماده اولیه‌ای یافت نشد' : 'هنوز ماده اولیه‌ای اضافه نشده است'}</p>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    )}
 
-                {activeTab === 'equipment' && equipment.length === 0 && (
-                  <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
-                    <Wrench size="64" />
-                    <p className={`${textSecondary} mt-4`}>هنوز تجهیزاتی اضافه نشده است</p>
-                  </div>
-                )}
-
-                {activeTab === 'equipment' && equipment.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {equipment.map(equip => (
-                      <div key={equip.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group`} style={{ transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Wrench />
-                              <h3 className="font-bold text-lg">{equip.title}</h3>
+                    {filteredMaterials.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {filteredMaterials.map(material => (
+                          <div key={material.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group hover:shadow-xl transition-all`}>
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Boxes />
+                                  <h3 className="font-bold">{material.title}</h3>
+                                </div>
+                                {material.category && (
+                                  <span className={`${inputBg} px-2 py-1 rounded-full text-xs`}>{material.category}</span>
+                                )}
+                              </div>
+                              
+                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => handleEdit(material, 'material')} className={`p-2 rounded-lg ${inputBg}`}>
+                                  <Edit2 />
+                                </button>
+                                <button onClick={() => handleDelete(material.id, 'material')} className={`p-2 rounded-lg ${inputBg} hover:bg-red-500 hover:text-white`}>
+                                  <Trash2 />
+                                </button>
+                              </div>
                             </div>
-                            {(equip.brand || equip.model) && (
-                              <p className={`${textSecondary} text-sm`}>
-                                {equip.brand} {equip.model}
+                            
+                            <div className={`${inputBg} rounded-lg p-3 text-center`}>
+                              <div className="font-bold text-xl mb-1" style={{ color: primaryColor }}>
+                                {parseFloat(material.pricePerUnit).toLocaleString('fa-IR')}
+                              </div>
+                              <div className={`${textSecondary} text-sm`}>
+                                تومان / {material.unit}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* Equipment */}
+                {activeTab === 'equipment' && (
+                  <>
+                    {filteredEquipment.length === 0 && (
+                      <div className={`${cardBg} rounded-2xl p-12 text-center border ${borderClass}`}>
+                        <Wrench size="64" />
+                        <p className={`${textSecondary} mt-4`}>{searchQuery ? 'تجهیزاتی یافت نشد' : 'هنوز تجهیزاتی اضافه نشده است'}</p>
+                      </div>
+                    )}
+
+                    {filteredEquipment.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredEquipment.map(equip => (
+                          <div key={equip.id} className={`${cardBg} rounded-xl p-5 border ${borderClass} group hover:shadow-xl transition-all`}>
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Wrench />
+                                  <h3 className="font-bold text-lg">{equip.title}</h3>
+                                </div>
+                                {(equip.brand || equip.model) && (
+                                  <p className={`${textSecondary} text-sm`}>{equip.brand} {equip.model}</p>
+                                )}
+                              </div>
+                              
+                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => handleEdit(equip, 'equipment')} className={`p-2 rounded-lg ${inputBg}`}>
+                                  <Edit2 />
+                                </button>
+                                <button onClick={() => handleDelete(equip.id, 'equipment')} className={`p-2 rounded-lg ${inputBg} hover:bg-red-500 hover:text-white`}>
+                                  <Trash2 />
+                                </button>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              {equip.purchaseDate && (
+                                <div className="flex justify-between text-sm">
+                                  <span className={textSecondary}>تاریخ خرید:</span>
+                                  <span>{new Date(equip.purchaseDate).toLocaleDateString('fa-IR')}</span>
+                                </div>
+                              )}
+                              {equip.purchasePrice && (
+                                <div className="flex justify-between text-sm">
+                                  <span className={textSecondary}>قیمت خرید:</span>
+                                  <span className="font-medium">{parseFloat(equip.purchasePrice).toLocaleString('fa-IR')} تومان</span>
+                                </div>
+                              )}
+                              {equip.maintenanceSchedule && (
+                                <div className="flex justify-between text-sm">
+                                  <span className={textSecondary}>نگهداری:</span>
+                                  <span>{equip.maintenanceSchedule}</span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {equip.notes && (
+                              <p className={`${textSecondary} text-sm pt-3 mt-3 border-t`} style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
+                                {equip.notes}
                               </p>
                             )}
                           </div>
-                          
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.3s' }}>
-                            <button onClick={() => handleEdit(equip, 'equipment')} className={`p-2 rounded-lg ${inputBg}`}>
-                              <Edit2 />
-                            </button>
-                            <button onClick={() => handleDelete(equip.id, 'equipment')} className={`p-2 rounded-lg ${inputBg}`}>
-                              <Trash2 />
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-2 mb-3">
-                          {equip.purchaseDate && (
-                            <div className="flex justify-between text-sm">
-                              <span className={textSecondary}>تاریخ خرید:</span>
-                              <span>{new Date(equip.purchaseDate).toLocaleDateString('fa-IR')}</span>
-                            </div>
-                          )}
-                          {equip.purchasePrice && (
-                            <div className="flex justify-between text-sm">
-                              <span className={textSecondary}>قیمت خرید:</span>
-                              <span className="font-medium">{parseFloat(equip.purchasePrice).toLocaleString('fa-IR')} تومان</span>
-                            </div>
-                          )}
-                          {equip.maintenanceSchedule && (
-                            <div className="flex justify-between text-sm">
-                              <span className={textSecondary}>نگهداری:</span>
-                              <span>{equip.maintenanceSchedule}</span>
-                            </div>
-                          )}
-                        </div>
-                        
-                        {equip.notes && (
-                          <p className={`${textSecondary} text-sm pt-3 border-t`} style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
-                            {equip.notes}
-                          </p>
-                        )}
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 )}
               </main>
 
+              {/* Modal */}
               {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" style={{ overflowY: 'auto' }}>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
                   <div className={`${cardBg} rounded-2xl max-w-2xl w-full p-6 shadow-2xl my-8`}>
                     <div className="flex items-center justify-between mb-6">
                       <h3 className="text-xl font-bold">
                         {editingItem ? 'ویرایش' : 'افزودن'} {
                           activeTab === 'products' ? 'محصول' :
                           activeTab === 'services' ? 'خدمت' :
-                          activeTab === 'materials' ? 'ماده اولیه' :
-                          'تجهیزات'
+                          activeTab === 'materials' ? 'ماده اولیه' : 'تجهیزات'
                         }
                       </h3>
                       <button onClick={() => { setShowModal(false); resetForm(); }} className={`p-2 rounded-lg ${inputBg}`}>
@@ -745,8 +794,7 @@
                             type="text"
                             value={formData.title}
                             onChange={(e) => setFormData({...formData, title: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            style={{ outline: 'none' }}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                             placeholder="عنوان را وارد کنید"
                           />
                         </div>
@@ -757,8 +805,7 @@
                             type="text"
                             value={formData.category}
                             onChange={(e) => setFormData({...formData, category: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            style={{ outline: 'none' }}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                             placeholder="دسته‌بندی"
                           />
                         </div>
@@ -770,17 +817,16 @@
                                 <label className="text-sm font-medium">مواد اولیه مورد نیاز</label>
                                 <button
                                   onClick={addMaterialToProduct}
-                                  className="px-3 py-1 rounded-lg text-white text-sm font-medium"
+                                  className="px-3 py-1 rounded-lg text-white text-sm font-medium flex items-center gap-1"
                                   style={{ backgroundColor: primaryColor }}
                                 >
                                   <Plus />
+                                  افزودن
                                 </button>
                               </div>
                               
                               {formData.materials.length === 0 ? (
-                                <p className={`${textSecondary} text-sm text-center py-4`}>
-                                  هنوز ماده اولیه‌ای اضافه نشده
-                                </p>
+                                <p className={`${textSecondary} text-sm text-center py-4`}>هنوز ماده اولیه‌ای اضافه نشده</p>
                               ) : (
                                 <div className="space-y-2">
                                   {formData.materials.map((pm, index) => (
@@ -788,13 +834,13 @@
                                       <select
                                         value={pm.materialId}
                                         onChange={(e) => updateProductMaterial(index, 'materialId', e.target.value)}
-                                        className={`flex-1 px-3 py-2 rounded-lg border ${borderClass} text-sm`}
+                                        className={`flex-1 px-3 py-2 rounded-lg border ${borderClass} text-sm outline-none`}
                                         style={{ backgroundColor: theme === 'dark' ? '#4b5563' : 'white' }}
                                       >
                                         <option value="">انتخاب ماده اولیه</option>
                                         {materials.map(mat => (
                                           <option key={mat.id} value={mat.id}>
-                                            {mat.title} ({mat.pricePerUnit.toLocaleString('fa-IR')} تومان / {mat.unit})
+                                            {mat.title} ({parseFloat(mat.pricePerUnit).toLocaleString('fa-IR')} تومان / {mat.unit})
                                           </option>
                                         ))}
                                       </select>
@@ -802,7 +848,7 @@
                                         type="number"
                                         value={pm.quantity}
                                         onChange={(e) => updateProductMaterial(index, 'quantity', e.target.value)}
-                                        className={`w-20 px-3 py-2 rounded-lg border ${borderClass} text-sm`}
+                                        className={`w-24 px-3 py-2 rounded-lg border ${borderClass} text-sm outline-none`}
                                         style={{ backgroundColor: theme === 'dark' ? '#4b5563' : 'white' }}
                                         placeholder="تعداد"
                                         min="0"
@@ -810,10 +856,7 @@
                                       />
                                       <button
                                         onClick={() => removeProductMaterial(index)}
-                                        className="p-2 rounded-lg"
-                                        style={{ transition: 'background-color 0.2s' }}
-                                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#ef4444'; e.currentTarget.style.color = 'white'; }}
-                                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}
+                                        className={`p-2 rounded-lg ${inputBg} hover:bg-red-500 hover:text-white`}
                                       >
                                         <Trash2 />
                                       </button>
@@ -838,7 +881,7 @@
                                     type="number"
                                     value={formData.profitMargin}
                                     onChange={(e) => setFormData({...formData, profitMargin: parseFloat(e.target.value) || 0})}
-                                    className={`w-full px-4 py-2 rounded-lg border ${borderClass}`}
+                                    className={`w-full px-4 py-2 rounded-lg border ${borderClass} outline-none`}
                                     style={{ backgroundColor: theme === 'dark' ? '#4b5563' : 'white' }}
                                     min="0"
                                     step="1"
@@ -848,7 +891,7 @@
                                 <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: theme === 'dark' ? '#4b5563' : '#e5e7eb' }}>
                                   <span className="text-sm font-medium">قیمت پیشنهادی:</span>
                                   <span className="font-bold text-lg" style={{ color: primaryColor }}>
-                                    {suggestedPrice.toLocaleString('fa-IR')} تومان
+                                    {suggestedPrice ? parseFloat(suggestedPrice).toLocaleString('fa-IR') : '0'} تومان
                                   </span>
                                 </div>
                               </div>
@@ -859,11 +902,12 @@
                         <div>
                           <label className="block mb-2 text-sm font-medium">قیمت فروش (تومان) *</label>
                           <input
-                            type="text"
+                            type="number"
                             value={formData.price}
                             onChange={(e) => setFormData({...formData, price: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            placeholder={activeTab === 'products' && suggestedPrice > 0 ? suggestedPrice.toFixed(0) : "قیمت"}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
+                            placeholder={suggestedPrice || "قیمت"}
+                            min="0"
                           />
                         </div>
 
@@ -873,8 +917,7 @@
                             value={formData.description}
                             onChange={(e) => setFormData({...formData, description: e.target.value})}
                             rows="3"
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            style={{ resize: 'none' }}
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none resize-none`}
                             placeholder="توضیحات تکمیلی"
                           />
                         </div>
@@ -897,8 +940,8 @@
                             type="text"
                             value={materialForm.title}
                             onChange={(e) => setMaterialForm({...materialForm, title: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            placeholder="مثال: پارچه، رنگ، چوب، ..."
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
+                            placeholder="مثال: جوهر سابلیمیشن، پارچه"
                           />
                         </div>
 
@@ -908,38 +951,39 @@
                             type="text"
                             value={materialForm.category}
                             onChange={(e) => setMaterialForm({...materialForm, category: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            placeholder="دسته‌بندی"
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
+                            placeholder="مواد چاپ، پارچه، محصول خام"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block mb-2 text-sm font-medium">واحد اندازه‌گیری *</label>
+                            <label className="block mb-2 text-sm font-medium">واحد *</label>
                             <select
                               value={materialForm.unit}
                               onChange={(e) => setMaterialForm({...materialForm, unit: e.target.value})}
-                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                             >
                               <option value="عدد">عدد</option>
                               <option value="کیلوگرم">کیلوگرم</option>
                               <option value="گرم">گرم</option>
                               <option value="متر">متر</option>
-                              <option value="سانتی‌متر">سانتی‌متر</option>
                               <option value="لیتر">لیتر</option>
                               <option value="میلی‌لیتر">میلی‌لیتر</option>
+                              <option value="برگ">برگ</option>
                               <option value="بسته">بسته</option>
                             </select>
                           </div>
 
                           <div>
-                            <label className="block mb-2 text-sm font-medium">قیمت هر واحد (تومان) *</label>
+                            <label className="block mb-2 text-sm font-medium">قیمت (تومان) *</label>
                             <input
-                              type="text"
+                              type="number"
                               value={materialForm.pricePerUnit}
                               onChange={(e) => setMaterialForm({...materialForm, pricePerUnit: e.target.value})}
-                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                               placeholder="قیمت"
+                              min="0"
                             />
                           </div>
                         </div>
@@ -962,8 +1006,8 @@
                             type="text"
                             value={equipmentForm.title}
                             onChange={(e) => setEquipmentForm({...equipmentForm, title: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            placeholder="مثال: دستگاه برش، کامپیوتر، ..."
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
+                            placeholder="مثال: دستگاه پرس، چاپگر"
                           />
                         </div>
 
@@ -974,7 +1018,7 @@
                               type="text"
                               value={equipmentForm.brand}
                               onChange={(e) => setEquipmentForm({...equipmentForm, brand: e.target.value})}
-                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                               placeholder="برند"
                             />
                           </div>
@@ -985,7 +1029,7 @@
                               type="text"
                               value={equipmentForm.model}
                               onChange={(e) => setEquipmentForm({...equipmentForm, model: e.target.value})}
-                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                               placeholder="مدل"
                             />
                           </div>
@@ -998,18 +1042,19 @@
                               type="date"
                               value={equipmentForm.purchaseDate}
                               onChange={(e) => setEquipmentForm({...equipmentForm, purchaseDate: e.target.value})}
-                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
                             />
                           </div>
 
                           <div>
-                            <label className="block mb-2 text-sm font-medium">قیمت خرید (تومان)</label>
+                            <label className="block mb-2 text-sm font-medium">قیمت خرید</label>
                             <input
-                              type="text"
+                              type="number"
                               value={equipmentForm.purchasePrice}
                               onChange={(e) => setEquipmentForm({...equipmentForm, purchasePrice: e.target.value})}
-                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                              placeholder="قیمت"
+                              className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
+                              placeholder="تومان"
+                              min="0"
                             />
                           </div>
                         </div>
@@ -1020,20 +1065,19 @@
                             type="text"
                             value={equipmentForm.maintenanceSchedule}
                             onChange={(e) => setEquipmentForm({...equipmentForm, maintenanceSchedule: e.target.value})}
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            placeholder="مثال: هر 6 ماه یکبار"
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none`}
+                            placeholder="مثال: هر 6 ماه"
                           />
                         </div>
 
                         <div>
-                          <label className="block mb-2 text-sm font-medium">یادداشت‌ها</label>
+                          <label className="block mb-2 text-sm font-medium">یادداشت</label>
                           <textarea
                             value={equipmentForm.notes}
                             onChange={(e) => setEquipmentForm({...equipmentForm, notes: e.target.value})}
                             rows="3"
-                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass}`}
-                            style={{ resize: 'none' }}
-                            placeholder="یادداشت‌های تکمیلی"
+                            className={`w-full px-4 py-2 rounded-lg ${inputBg} border ${borderClass} outline-none resize-none`}
+                            placeholder="یادداشت‌ها"
                           />
                         </div>
 
@@ -1050,6 +1094,7 @@
                 </div>
               )}
 
+              {/* Settings */}
               {showSettings && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                   <div className={`${cardBg} rounded-2xl max-w-md w-full p-6 shadow-2xl`}>
@@ -1066,20 +1111,16 @@
                         <div className="flex gap-2">
                           <button
                             onClick={() => setTheme('dark')}
-                            className={`flex-1 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
-                              theme === 'dark' ? 'text-white' : inputBg
-                            }`}
-                            style={theme === 'dark' ? { backgroundColor: primaryColor, transition: 'all 0.3s' } : { transition: 'all 0.3s' }}
+                            className={`flex-1 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${theme === 'dark' ? 'text-white' : inputBg}`}
+                            style={theme === 'dark' ? { backgroundColor: primaryColor } : {}}
                           >
                             <Moon />
                             تیره
                           </button>
                           <button
                             onClick={() => setTheme('light')}
-                            className={`flex-1 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
-                              theme === 'light' ? 'text-white' : inputBg
-                            }`}
-                            style={theme === 'light' ? { backgroundColor: primaryColor, transition: 'all 0.3s' } : { transition: 'all 0.3s' }}
+                            className={`flex-1 py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${theme === 'light' ? 'text-white' : inputBg}`}
+                            style={theme === 'light' ? { backgroundColor: primaryColor } : {}}
                           >
                             <Sun />
                             روشن
@@ -1094,17 +1135,12 @@
                             <button
                               key={color}
                               onClick={() => setPrimaryColor(color)}
-                              className={`w-12 h-12 rounded-xl ${
-                                primaryColor === color ? 'ring-4 ring-offset-2' : ''
-                              }`}
+                              className={`w-12 h-12 rounded-xl ${primaryColor === color ? 'ring-4 ring-offset-2' : ''}`}
                               style={{ 
                                 backgroundColor: color,
                                 ringColor: color,
-                                ringOffsetColor: theme === 'dark' ? '#1f2937' : '#fff',
-                                transition: 'transform 0.2s'
+                                ringOffsetColor: theme === 'dark' ? '#1f2937' : '#fff'
                               }}
-                              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-                              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                             />
                           ))}
                         </div>
