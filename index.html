@@ -126,9 +126,10 @@
           };
 
           const calculateProductCost = (productMaterials) => {
+            if (!productMaterials || productMaterials.length === 0) return 0;
             return productMaterials.reduce((total, pm) => {
               const material = materials.find(m => m.id === pm.materialId);
-              if (material) {
+              if (material && material.pricePerUnit && pm.quantity) {
                 return total + (parseFloat(material.pricePerUnit) * parseFloat(pm.quantity));
               }
               return total;
@@ -138,17 +139,13 @@
           const handleAddProduct = () => {
             if (!formData.title.trim()) return;
             
-            const cost = calculateProductCost(formData.materials);
-            const suggestedPrice = cost * (1 + formData.profitMargin / 100);
-            
             const newProduct = {
               id: Date.now(),
               title: formData.title,
               description: formData.description,
               category: formData.category,
               materials: formData.materials,
-              cost: cost,
-              price: formData.price || suggestedPrice.toFixed(0),
+              price: formData.price,
               profitMargin: formData.profitMargin,
               createdAt: new Date().toISOString()
             };
@@ -161,8 +158,6 @@
           const handleUpdateProduct = () => {
             if (!formData.title.trim()) return;
             
-            const cost = calculateProductCost(formData.materials);
-            
             const updatedProducts = products.map(item => 
               item.id === editingItem.id 
                 ? { 
@@ -171,7 +166,6 @@
                     description: formData.description,
                     category: formData.category,
                     materials: formData.materials,
-                    cost: cost,
                     price: formData.price,
                     profitMargin: formData.profitMargin,
                     updatedAt: new Date().toISOString()
@@ -470,8 +464,9 @@
                 {activeTab === 'products' && products.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map(product => {
-                      const profit = product.price && product.cost ? parseFloat(product.price) - product.cost : 0;
-                      const profitPercent = product.cost > 0 ? ((parseFloat(product.price) - product.cost) / product.cost) * 100 : 0;
+                      const cost = calculateProductCost(product.materials);
+                      const profit = product.price && cost ? parseFloat(product.price) - cost : 0;
+                      const profitPercent = cost > 0 ? ((parseFloat(product.price) - cost) / cost) * 100 : 0;
                       const isExpanded = expandedProduct === product.id;
 
                       return (
@@ -508,12 +503,12 @@
                           <div className={`${inputBg} rounded-lg p-3 mb-3 space-y-2`}>
                             <div className="flex justify-between text-sm">
                               <span className={textSecondary}>هزینه تمام شده:</span>
-                              <span className="font-medium">{product.cost.toLocaleString('fa-IR')} تومان</span>
+                              <span className="font-medium">{cost.toLocaleString('fa-IR')} تومان</span>
                             </div>
                             <div className="flex justify-between text-sm">
                               <span className={textSecondary}>قیمت فروش:</span>
                               <span className="font-bold" style={{ color: primaryColor }}>
-                                {parseFloat(product.price).toLocaleString('fa-IR')} تومان
+                                {parseFloat(product.price || 0).toLocaleString('fa-IR')} تومان
                               </span>
                             </div>
                             <div className="flex justify-between text-sm pt-2 border-t" style={{ borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db' }}>
@@ -535,7 +530,11 @@
                                 <div className={`mt-2 ${inputBg} rounded-lg p-3 space-y-2`}>
                                   {product.materials.map((pm, idx) => {
                                     const material = materials.find(m => m.id === pm.materialId);
-                                    if (!material) return null;
+                                    if (!material) return (
+                                      <div key={idx} className="text-xs text-red-500">
+                                        ماده اولیه حذف شده است
+                                      </div>
+                                    );
                                     const itemCost = parseFloat(material.pricePerUnit) * parseFloat(pm.quantity);
                                     return (
                                       <div key={idx} className="text-xs flex justify-between">
